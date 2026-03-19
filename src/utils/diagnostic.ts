@@ -34,32 +34,13 @@ export function getDiagnostic(index: number): DiagnosticResult {
     throw new RangeError('Health index must be a positive integer')
   }
 
-  const isMultipleOf3 = index % 3 === 0
-  const isMultipleOf5 = index % 5 === 0
-
-  if (isMultipleOf3 && isMultipleOf5) {
-    return {
-      units: [MEDICAL_UNITS.CARDIOLOGY, MEDICAL_UNITS.TRAUMATOLOGY],
-      label: `${MEDICAL_UNITS.CARDIOLOGY}, ${MEDICAL_UNITS.TRAUMATOLOGY}`,
-    }
-  }
-
-  if (isMultipleOf3) {
-    return {
-      units: [MEDICAL_UNITS.CARDIOLOGY],
-      label: MEDICAL_UNITS.CARDIOLOGY,
-    }
-  }
-
-  if (isMultipleOf5) {
-    return {
-      units: [MEDICAL_UNITS.TRAUMATOLOGY],
-      label: MEDICAL_UNITS.TRAUMATOLOGY,
-    }
-  }
+  const units: MedicalUnit[] = [
+    ...(index % 3 === 0 ? [MEDICAL_UNITS.CARDIOLOGY] : []),
+    ...(index % 5 === 0 ? [MEDICAL_UNITS.TRAUMATOLOGY] : []),
+  ]
 
   return {
-    units: [],
-    label: 'Aucune orientation spécifique',
+    units,
+    label: units.length > 0 ? units.join(', ') : 'Aucune orientation spécifique',
   }
 }
